@@ -10,21 +10,21 @@ import numpy as np
 import joblib
 from tqdm import tqdm
 
-# Load CLIP model
+# load CLIP model
 model = CLIPModel.from_pretrained('openai/clip-vit-base-patch32')
 processor = CLIPProcessor.from_pretrained('openai/clip-vit-base-patch32')
 
 model.eval()
 
-# Dataset path
+# dataset path
 DATASET_PATH = 'dataset'
 
-# Label mapping
+# label mapping
 ENGAGED = ['confused', 'focused', 'frustrated']
 NOT_ENGAGED = ['bored', 'drowsy', 'looking_away']
 
 
-# Function to extract CLIP embedding
+# function to extract CLIP embeddings
 def get_embeddings_batch(image_paths, batch_size=32):
     embeddings = []
     for i in tqdm(range(0, len(image_paths), batch_size)):
@@ -32,10 +32,10 @@ def get_embeddings_batch(image_paths, batch_size=32):
 
         images = []
         for path in batch_paths:
-            img = Image.open(path).convert("RGB")
+            img = Image.open(path).convert('RGB')
             images.append(img)
 
-        inputs = processor(images=images, return_tensors="pt")
+        inputs = processor(images=images, return_tensors='pt')
         with torch.no_grad():
             features = model.get_image_features(**inputs)
 
@@ -50,13 +50,14 @@ def get_embeddings_batch(image_paths, batch_size=32):
 
     return np.array(embeddings)
 
-# Load dataset
+# load dataset
 X = []
 y = []
 
 image_paths = []
 labels = []
 
+# assign labels
 for root, dirs, files in os.walk(DATASET_PATH):
     for file in files:
 
@@ -75,23 +76,23 @@ for root, dirs, files in os.walk(DATASET_PATH):
         image_paths.append(path)
         labels.append(label)
 
-print("Extracting CLIP embeddings...")
+print('Extracting CLIP embeddings...')
 X = get_embeddings_batch(image_paths, batch_size=32)
 y = np.array(labels)
-print("Dataset size:", X.shape)
+print('Dataset size:', X.shape)
 
-# Train/test split
+# train/test split
 X_train, X_test, y_train, y_test = train_test_split(
     X, y, test_size=0.2, random_state=42
 )
 
-# Train classifier
+# train classifier
 clf = LogisticRegression(max_iter=2000)
 
 print('Training classifier...')
 clf.fit(X_train, y_train)
 
-# Evaluate model
+# evaluate model
 pred = clf.predict(X_test)
 print(classification_report(y_test, pred))
 
@@ -113,6 +114,6 @@ print('Recall:', recall)
 print('\nConfusion Matrix')
 print(cm)
 
-# Save model
+# save model
 joblib.dump(clf, 'engagement_classifier.pkl')
 print('Model saved.')
