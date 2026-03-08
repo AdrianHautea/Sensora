@@ -27,6 +27,11 @@ def predict_engagement(face_image):
     prob = clf.predict_proba([embedding])[0]
     confidence = prob[emotion_idx]
 
+    print('Emotion probabilities:')
+    for e, p in zip(EMOTIONS, prob):
+        print(f"{e}: {p:.3f}")
+    print()
+
     if emotion in ENGAGED_EMOTIONS:
         label = 'ENGAGED'
     else:

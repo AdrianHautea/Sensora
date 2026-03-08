@@ -4,8 +4,6 @@ from collections import deque
 import numpy as np
 
 SERVER_URL = 'http://localhost:5000/vision'
-
-last_send_time = 0
 SEND_INTERVAL = 1.0
 
 def send_to_backend(data):
@@ -21,6 +19,9 @@ class FocusScorer:
 
         # optional rolling engagement window
         self.engagement_window = deque(maxlen=window_size)
+
+        # timestamp tracker
+        self.last_send_time = 0
 
     # signal scoring helpers
     def _engagement_score(self, engagement, confidence):
@@ -69,9 +70,9 @@ class FocusScorer:
 
         # raw focus score
         raw_focus = (
-            0.7 * engagement_score +
-            0.2 * gaze_score +
-            0.1 * head_score
+            0.5 * engagement_score +
+            0.35 * gaze_score +
+            0.15 * head_score
         )
 
         # clamp
@@ -114,8 +115,8 @@ class FocusScorer:
 
         current_time = time.time()
 
-        if current_time - last_send_time > SEND_INTERVAL:
+        if current_time - self.last_send_time > SEND_INTERVAL:
             send_to_backend(result)
-            last_send_time = current_time
+            self.last_send_time = current_time
             
         return result
