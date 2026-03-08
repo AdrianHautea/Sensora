@@ -4,7 +4,7 @@ import time
 PORT = 'COM5'      # change for your system
 BAUD = 115200
 
-TEST_MODE = True
+TEST_MODE = False
 
 class SerialSender:
     def __init__(self):

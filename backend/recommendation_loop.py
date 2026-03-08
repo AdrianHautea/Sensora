@@ -6,20 +6,21 @@ from backend.recommendation import generate_recommendation
 from backend.serial_sender import SerialSender
 
 
-INTERVAL = 60  # seconds
-last_timestamp = 0
+INTERVAL = 10  # seconds
 
 def recommendation_worker():
-    print('Recommendation loop started')
+    print('Recommendation Loop Started')
     sender = SerialSender()
+    last_timestamp = 0   # initialize here
     while True:
         samples = get_recent_samples()
         if len(samples) == 0:
+            time.sleep(INTERVAL)
             continue
 
         latest_sample = samples[-1]
-
         if latest_sample['timestamp'] <= last_timestamp:
+            time.sleep(INTERVAL)
             continue
 
         last_timestamp = latest_sample['timestamp']
@@ -27,6 +28,7 @@ def recommendation_worker():
             rec = generate_recommendation(samples)
             print('Recommendation:', rec)
             sender.send(rec)
+
         time.sleep(INTERVAL)
 
 
