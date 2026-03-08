@@ -4,8 +4,11 @@ import cv2
 from pipelines.mediapipe_utils import detect_face
 from pipelines.engagement_pipeline import predict_engagement
 from pipelines.eye_tracking_utils import get_eye_tracking
+from pipelines.smoothing_utils import MajorityVote
 
 DATASET_PATH = 'dataset'
+
+engagement_smoother = MajorityVote(window_size=10)
 
 for root, dirs, files in os.walk(DATASET_PATH):
     for file in files:
@@ -26,6 +29,7 @@ for root, dirs, files in os.walk(DATASET_PATH):
             continue
 
         label, emo, conf = predict_engagement(face)
+        smoothed_label = engagement_smoother.update(label)
         x1, y1, x2, y2 = bbox
 
         # draw face box
@@ -42,7 +46,7 @@ for root, dirs, files in os.walk(DATASET_PATH):
 
         cv2.putText(
             frame,
-            f'{label} | Yaw: {yaw:.1f} | Gaze: {gaze}',
+            f'{smoothed_label} | Yaw: {yaw:.1f} | Gaze: {gaze}',
             (x1, y1 - 10),
             cv2.FONT_HERSHEY_SIMPLEX,
             0.7,
@@ -59,5 +63,5 @@ for root, dirs, files in os.walk(DATASET_PATH):
 
         if key == 27:
             break
-        
+
 cv2.destroyAllWindows()

@@ -4,6 +4,9 @@ import mediapipe as mp
 
 from mediapipe.tasks import python
 from mediapipe.tasks.python import vision
+from pipelines.smoothing_utils import MovingAverage
+
+yaw_filter = MovingAverage(window_size=5)
 
 # load face landmarker
 base_options = python.BaseOptions(
@@ -146,6 +149,7 @@ def get_eye_tracking(frame):
 
     # head pose
     yaw, pitch, roll = _estimate_head_pose(points, frame.shape)
+    yaw = yaw_filter.update(yaw)
 
     # combine gaze + head pose
     if gaze_ratio < 0.35 or yaw < -15:
