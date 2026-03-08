@@ -71,6 +71,74 @@ export const styles = {
     fontFamily: 'inherit',
     transition: 'background 0.2s',
   },
+
+  // Architecture section
+  architectureSection: {
+    borderTop: '1px solid #1e293b',
+    padding: '5rem 2rem',
+    background: '#0a1120',
+  },
+  architectureInner: {
+    maxWidth: '900px',
+    margin: '0 auto',
+    width: '100%',
+    boxSizing: 'border-box',
+  },
+  architectureEyebrow: {
+    fontSize: '0.75rem',
+    letterSpacing: '0.15em',
+    textTransform: 'uppercase',
+    color: '#7dd3fc',
+    marginBottom: '0.75rem',
+  },
+  architectureTitle: {
+    fontSize: '2rem',
+    fontWeight: 'bold',
+    color: '#f1f5f9',
+    letterSpacing: '-0.02em',
+    marginBottom: '1rem',
+    marginTop: 0,
+  },
+  architectureSub: {
+    fontSize: '1rem',
+    color: '#64748b',
+    maxWidth: '560px',
+    lineHeight: '1.7',
+    marginBottom: '3rem',
+  },
+  architectureGrid: {
+    display: 'grid',
+    gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))',
+    gap: '1.5rem',
+  },
+  architectureCard: {
+    background: '#1e293b',
+    border: '1px solid #334155',
+    borderRadius: '10px',
+    padding: '1.75rem',
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '0.75rem',
+  },
+  architectureStep: {
+    fontSize: '0.75rem',
+    fontFamily: 'monospace',
+    color: '#7dd3fc',
+    letterSpacing: '0.1em',
+  },
+  architectureCardTitle: {
+    fontSize: '1.1rem',
+    fontWeight: 'bold',
+    color: '#f1f5f9',
+    margin: 0,
+  },
+  architectureCardDesc: {
+    fontSize: '0.9rem',
+    color: '#64748b',
+    lineHeight: '1.6',
+    margin: 0,
+  },
+
   footer: {
     padding: '1.5rem 2rem',
     borderTop: '1px solid #1e293b',
