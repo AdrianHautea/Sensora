@@ -5,7 +5,7 @@ from mediapipe.tasks.python import vision
 
 # load detector
 base_options = python.BaseOptions(
-    model_asset_path='models/blaze_face_short_range.tflite'
+    model_asset_path = 'models/blaze_face_short_range.tflite'
 )
 
 options = vision.FaceDetectorOptions(
@@ -17,8 +17,8 @@ detector = vision.FaceDetector.create_from_options(options)
 def detect_face(frame, padding=0.2):
 
     mp_image = mp.Image(
-        image_format=mp.ImageFormat.SRGB,
-        data=frame
+        image_format = mp.ImageFormat.SRGB,
+        data = frame
     )
 
     result = detector.detect(mp_image)

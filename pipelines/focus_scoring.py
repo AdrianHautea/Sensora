@@ -1,6 +1,18 @@
 import time
+import requests
 from collections import deque
 import numpy as np
+
+SERVER_URL = 'http://localhost:5000/vision'
+
+last_send_time = 0
+SEND_INTERVAL = 1.0
+
+def send_to_backend(data):
+    try:
+        requests.post(SERVER_URL, json=data, timeout=0.2)
+    except:
+        pass
 
 class FocusScorer:
     def __init__(self, window_size=15):
@@ -17,7 +29,6 @@ class FocusScorer:
         
         return 0.0
 
-
     def _gaze_score(self, gaze):
         if gaze == 'CENTER':
             return 1.0
@@ -26,10 +37,8 @@ class FocusScorer:
 
         return 0.2
 
-
     def _head_pose_score(self, yaw):
         yaw = abs(yaw)
-
         if yaw < 10:
             return 1.0
         if yaw < 25:
@@ -38,7 +47,6 @@ class FocusScorer:
         return 0.2
 
     # main focus scoring function
-
     def compute_focus_score(
         self,
         emotion,
@@ -81,7 +89,7 @@ class FocusScorer:
 
 
         # return JSON ready output
-        return {
+        result = {
             'timestamp': time.time(),
             'emotion': emotion,
             'engagement': engagement,
@@ -103,3 +111,11 @@ class FocusScorer:
             # rolling engagement
             'engagement_smoothed': engagement_avg
         }
+
+        current_time = time.time()
+
+        if current_time - last_send_time > SEND_INTERVAL:
+            send_to_backend(result)
+            last_send_time = current_time
+            
+        return result

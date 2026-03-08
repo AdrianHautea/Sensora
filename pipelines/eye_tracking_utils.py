@@ -14,14 +14,13 @@ base_options = python.BaseOptions(
 )
 
 options = vision.FaceLandmarkerOptions(
-    base_options=base_options,
-    output_face_blendshapes=False,
-    output_facial_transformation_matrixes=True,
-    num_faces=1
+    base_options = base_options,
+    output_face_blendshapes = False,
+    output_facial_transformation_matrixes = True,
+    num_faces = 1
 )
 
 landmarker = vision.FaceLandmarker.create_from_options(options)
-
 
 # landmark indices
 LEFT_EYE = [33, 133]
@@ -109,8 +108,8 @@ def get_eye_tracking(frame):
 
     h, w, _ = frame.shape
     mp_image = mp.Image(
-        image_format=mp.ImageFormat.SRGB,
-        data=frame
+        image_format = mp.ImageFormat.SRGB,
+        data = frame
     )
 
     result = landmarker.detect(mp_image)
