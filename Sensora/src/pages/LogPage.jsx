@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { styles } from './styles/styles'
 import LineChart from '../components/LineChart'
+import '../pages/styles/LandingPage.css'
 
 const levelColor = { INFO: '#4ade80', WARN: '#facc15', ERROR: '#f87171' }
 
@@ -23,25 +24,36 @@ export default function LogPage({ onNavigate }) {
     { time: '2026-03-07T11:30:00', score: 66 },
   ])
 
+  const [activeTab, setActiveTab] = useState(null)
+
   return (
     <div style={styles.page}>
-      <nav style={styles.nav}>
+      <nav style={styles.nav} className="anim-nav">
         <span style={styles.navLogo}>Sensora</span>
-        <button style={styles.navBtn} onClick={() => onNavigate('landing')}>← Home</button>
+        <button
+          style={styles.navBtn}
+          className={`nav-cta${activeTab === 'home' ? ' active' : ''}`}
+          onClick={() => { setActiveTab('home'); onNavigate('landing') }}
+        >
+          ← Home
+        </button>
       </nav>
 
       {/* Focus Score */}
-      <main style={{ ...styles.hero, alignItems: 'flex-start', padding: '2.5rem 2rem' }}>
+      <main style={{ ...styles.hero, alignItems: 'flex-start', padding: '2.5rem 2rem' }} className="anim-hero">
         <h1 style={{ ...styles.heroTitle, fontSize: '2rem', marginBottom: '1rem' }}>Focus Score</h1>
         <p style={{ color: '#94a3b8', marginTop: 0, marginBottom: 18 }}>Line chart of focus score over time. Hover points for details (native tooltip).</p>
 
-        <div style={{ width: '100%', maxWidth: 805, background: '#0b1220', padding: 18, borderRadius: 10 }}>
+        <div
+          style={{ width: '100%', maxWidth: 805, background: '#0b1220', padding: 18, borderRadius: 10 }}
+          className="anim-card"
+        >
           <LineChart data={focusData} width={800} height={260} />
         </div>
       </main>
 
       {/* Activity Log */}
-      <main style={{ ...styles.hero, alignItems: 'flex-start', padding: '3rem 2rem' }}>
+      <main style={{ ...styles.hero, alignItems: 'flex-start', padding: '3rem 2rem' }} className="anim-architecture">
         <h1 style={{ ...styles.heroTitle, fontSize: '2rem', marginBottom: '1.5rem' }}>Activity Log</h1>
 
         <div style={{ width: '100%', maxWidth: 920 }}>
@@ -51,8 +63,12 @@ export default function LogPage({ onNavigate }) {
               <span style={{ flex: 1 }}>Level</span>
               <span style={{ flex: 5 }}>Message</span>
             </div>
-            {logs.map(log => (
-              <div key={log.id} style={styles.tableRow}>
+            {logs.map((log, i) => (
+              <div
+                key={log.id}
+                style={{ ...styles.tableRow, animationDelay: `${i * 80}ms` }}
+                className="anim-card"
+              >
                 <span style={{ flex: 2, color: '#94a3b8', fontSize: '0.85rem' }}>{log.time}</span>
                 <span style={{ flex: 1 }}>
                   <span style={{

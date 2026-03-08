@@ -1,6 +1,10 @@
+import React, { useState } from 'react'
 import { styles } from './styles/styles'
+import '../pages/styles/LandingPage.css'
 
 export default function LandingPage({ onNavigate }) {
+  const [activeTab, setActiveTab] = useState(null)
+  
   const architectureItems = [
     {
       step: '01',
@@ -21,17 +25,23 @@ export default function LandingPage({ onNavigate }) {
 
   return (
     <div style={styles.page}>
-      <nav style={styles.nav}>
+      <nav style={styles.nav} className="anim-nav">
         <span style={styles.navLogo}>Sensora</span>
-        <button style={styles.navBtn} onClick={() => onNavigate('log')}>Log</button>
+        <button
+          style={styles.navBtn}
+          className={`nav-cta${activeTab === 'log' ? ' active' : ''}`}
+          onClick={() => { setActiveTab('log'); onNavigate('log') }}
+        >
+          Log
+        </button>
       </nav>
 
-      <main style={styles.hero}>
+      <main style={styles.hero} className="anim-hero">
         <h1 style={styles.heroTitle}>Welcome to Sensora</h1>
         <p style={styles.heroSub}>Study sessions shaped by you, for you.</p>
       </main>
 
-      <section style={styles.architectureSection}>
+      <section style={styles.architectureSection} className="anim-architecture">
         <div style={styles.architectureInner}>
           <p style={styles.architectureEyebrow}>How it works</p>
           <h2 style={styles.architectureTitle}>Built around your rhythm</h2>
@@ -40,8 +50,12 @@ export default function LandingPage({ onNavigate }) {
           </p>
 
           <div style={styles.architectureGrid}>
-            {architectureItems.map((item) => (
-              <div key={item.step} style={styles.architectureCard}>
+            {architectureItems.map((item, i) => (
+              <div
+                key={item.step}
+                style={{ ...styles.architectureCard, animationDelay: `${i * 140}ms` }}
+                className="architecture-card anim-card"
+              >
                 <span style={styles.architectureStep}>{item.step}</span>
                 <h3 style={styles.architectureCardTitle}>{item.title}</h3>
                 <p style={styles.architectureCardDesc}>{item.description}</p>
