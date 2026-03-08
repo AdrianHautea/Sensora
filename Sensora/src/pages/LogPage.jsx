@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import React, { useState } from 'react'
 import { styles } from './styles/styles'
 import LineChart from '../components/LineChart'
 import '../pages/styles/LandingPage.css'
@@ -6,14 +6,7 @@ import '../pages/styles/LandingPage.css'
 const levelColor = { INFO: '#4ade80', WARN: '#facc15', ERROR: '#f87171' }
 
 export default function LogPage({ onNavigate }) {
-  const [logs] = useState([
-    { id: 1, time: '2026-03-07 09:00', level: 'INFO',  message: 'Application started successfully.' },
-    { id: 2, time: '2026-03-07 09:02', level: 'INFO',  message: 'User session initialized.' },
-    { id: 3, time: '2026-03-07 09:05', level: 'WARN',  message: 'Config value missing, using default.' },
-    { id: 4, time: '2026-03-07 09:10', level: 'ERROR', message: 'Failed to connect to external service.' },
-    { id: 5, time: '2026-03-07 09:15', level: 'INFO',  message: 'Retry succeeded. Connection restored.' },
-  ])
-
+  // focus data (replace with real source as needed)
   const [focusData] = useState([
     { time: '2026-03-07T08:30:00', score: 62 },
     { time: '2026-03-07T09:00:00', score: 70 },
@@ -25,6 +18,24 @@ export default function LogPage({ onNavigate }) {
   ])
 
   const [activeTab, setActiveTab] = useState(null)
+
+  const architectureItems = [
+    {
+      step: '01',
+      title: 'Input',
+      description: 'Log sessions quickly — subject, duration and initial focus.',
+    },
+    {
+      step: '02',
+      title: 'Analysis',
+      description: 'Detects patterns across sessions to surface your best conditions.',
+    },
+    {
+      step: '03',
+      title: 'Adaptation',
+      description: 'Recommendations evolve with your data: more of what works.',
+    },
+  ]
 
   return (
     <div style={styles.page}>
@@ -52,40 +63,30 @@ export default function LogPage({ onNavigate }) {
         </div>
       </main>
 
-      {/* Activity Log */}
-      <main style={{ ...styles.hero, alignItems: 'flex-start', padding: '3rem 2rem' }} className="anim-architecture">
-        <h1 style={{ ...styles.heroTitle, fontSize: '2rem', marginBottom: '1.5rem' }}>Activity Log</h1>
+      {/* Architecture / How it works (moved from LandingPage) */}
+      <section style={styles.architectureSection} className="anim-architecture">
+        <div style={styles.architectureInner}>
+          <p style={styles.architectureEyebrow}>How it works</p>
+          <h2 style={styles.architectureTitle}>Built around your rhythm</h2>
+          <p style={styles.architectureSub}>
+            Sensora doesn't apply a one-size-fits-all method. It listens, learns, and adjusts — turning your habits into your advantage.
+          </p>
 
-        <div style={{ width: '100%', maxWidth: 920 }}>
-          <div style={styles.table}>
-            <div style={styles.tableHeader}>
-              <span style={{ flex: 2 }}>Timestamp</span>
-              <span style={{ flex: 1 }}>Level</span>
-              <span style={{ flex: 5 }}>Message</span>
-            </div>
-            {logs.map((log, i) => (
+          <div style={styles.architectureGrid}>
+            {architectureItems.map((item, i) => (
               <div
-                key={log.id}
-                style={{ ...styles.tableRow, animationDelay: `${i * 80}ms` }}
-                className="anim-card"
+                key={item.step}
+                style={{ ...styles.architectureCard, animationDelay: `${i * 140}ms` }}
+                className="architecture-card anim-card"
               >
-                <span style={{ flex: 2, color: '#94a3b8', fontSize: '0.85rem' }}>{log.time}</span>
-                <span style={{ flex: 1 }}>
-                  <span style={{
-                    ...styles.badge,
-                    background: levelColor[log.level] + '22',
-                    color: levelColor[log.level],
-                    border: `1px solid ${levelColor[log.level]}44`
-                  }}>
-                    {log.level}
-                  </span>
-                </span>
-                <span style={{ flex: 5, color: '#e2e8f0' }}>{log.message}</span>
+                <span style={styles.architectureStep}>{item.step}</span>
+                <h3 style={styles.architectureCardTitle}>{item.title}</h3>
+                <p style={styles.architectureCardDesc}>{item.description}</p>
               </div>
             ))}
           </div>
         </div>
-      </main>
+      </section>
     </div>
   )
 }

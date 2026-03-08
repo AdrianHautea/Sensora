@@ -23,7 +23,7 @@ export const styles = {
     fontSize: '1.25rem',
     fontWeight: 'bold',
     letterSpacing: '0.05em',
-    color: '#7dd3fc',
+    color: '#f1f5f9',
   },
   navBtn: {
     background: 'transparent',
@@ -88,7 +88,7 @@ export const styles = {
     fontSize: '0.75rem',
     letterSpacing: '0.15em',
     textTransform: 'uppercase',
-    color: '#7dd3fc',
+    color: '#94a3b8',
     marginBottom: '0.75rem',
   },
   architectureTitle: {
