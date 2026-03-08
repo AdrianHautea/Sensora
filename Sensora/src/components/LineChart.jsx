@@ -23,8 +23,8 @@ export default function LineChart({ data = [], width = 900, height = 260, paddin
     <svg viewBox={`0 0 ${width} ${height}`} width="100%" height={height} style={{ maxWidth: '100%' }}>
       <defs>
         <linearGradient id="lineGrad" x1="0" x2="0" y1="0" y2="1">
-          <stop offset="0%" stopColor="#7c3aed" stopOpacity="0.9" />
-          <stop offset="100%" stopColor="#7c3aed" stopOpacity="0.2" />
+          <stop offset="0%" stopColor="#7dd3fc" stopOpacity="0.9" />
+          <stop offset="100%" stopColor="#7dd3fc" stopOpacity="0.2" />
         </linearGradient>
       </defs>
 
@@ -39,7 +39,7 @@ export default function LineChart({ data = [], width = 900, height = 260, paddin
         )
       })}
 
-      <path d={pathD} fill="none" stroke="#7c3aed" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" />
+      <path d={pathD} fill="none" stroke="#7dd3fc" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" />
 
       <path
         d={`${pathD} L ${padding + innerW} ${padding + innerH} L ${padding} ${padding + innerH} Z`}
@@ -53,7 +53,7 @@ export default function LineChart({ data = [], width = 900, height = 260, paddin
         const datum = data[i]
         return (
           <g key={i}>
-            <circle cx={x} cy={y} r={4.5} fill="#fff" stroke="#7c3aed" strokeWidth="1.8" />
+            <circle cx={x} cy={y} r={4.5} fill="#fff" stroke="#7dd3fc" strokeWidth="1.8" />
             <title>{`${new Date(datum.time).toLocaleString()} — ${datum.score}`}</title>
           </g>
         )
