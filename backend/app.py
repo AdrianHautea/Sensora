@@ -3,6 +3,7 @@ from .vision_routes import vision_bp
 from .esp_routes import esp_bp
 
 from backend.focus_store import get_recent_samples
+from backend.recommendation_loop import start_recommendation_loop
 
 def create_app():
 
@@ -10,6 +11,8 @@ def create_app():
 
     app.register_blueprint(vision_bp)
     app.register_blueprint(esp_bp)
+
+    start_recommendation_loop()
 
     return app
 
