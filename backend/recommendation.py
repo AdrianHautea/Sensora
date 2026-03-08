@@ -2,10 +2,10 @@ import os
 import statistics
 from langchain_google_genai import ChatGoogleGenerativeAI
 
-GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
+GEMINI_API_KEY = os.getenv('GEMINI_API_KEY')
 
 llm = ChatGoogleGenerativeAI(
-    model = "gemini-2.5-flash",
+    model = 'gemini-3.1-pro-preview',
     google_api_key = GEMINI_API_KEY
 )
 

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { styles } from './styles/styles'
 import LineChart from '../components/LineChart'
 import '../pages/styles/LandingPage.css'
@@ -9,17 +9,100 @@ import mcuImg from '../assets/mcu.png'
 const levelColor = { INFO: '#4ade80', WARN: '#facc15', ERROR: '#f87171' }
 
 export default function LogPage({ onNavigate }) {
-  const [focusData] = useState([
-    { time: '2026-03-07T08:30:00', score: 62 },
-    { time: '2026-03-07T09:00:00', score: 70 },
-    { time: '2026-03-07T09:30:00', score: 55 },
-    { time: '2026-03-07T10:00:00', score: 78 },
-    { time: '2026-03-07T10:30:00', score: 85 },
-    { time: '2026-03-07T11:00:00', score: 73 },
-    { time: '2026-03-07T11:30:00', score: 66 },
-  ])
-
+  const [focusData, setFocusData] = useState([])
   const [activeTab, setActiveTab] = useState(null)
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState(null)
+  const [live, setLive] = useState(false)
+  const wsRef = useRef(null)
+
+  // Handles both backend shape { timestamp, focus_smoothed, ... }
+  // and generic shape { time, score, ... }
+  function normalizePoints(points = []) {
+    return points.map(p => ({
+      time: p.timestamp
+        ? new Date(p.timestamp * 1000).toISOString()  // unix epoch → ISO string
+        : p.time,
+      score: p.focus_smoothed != null
+        ? p.focus_smoothed * 100                       // 0-1 → 0-100
+        : Number(p.score ?? 0),
+      emotion: p.emotion,
+      confidence: p.confidence,
+      engagement: p.engagement,
+      gaze: p.gaze,
+    }))
+  }
+
+  async function loadFocus({ start, end, resolution } = {}) {
+    setLoading(true)
+    setError(null)
+    try {
+      const qs = new URLSearchParams()
+      if (start) qs.set('start', start)
+      if (end) qs.set('end', end)
+      if (resolution) qs.set('res', resolution)
+      const res = await fetch(`/api/focus/history?${qs.toString()}`)
+      if (!res.ok) throw new Error(`API ${res.status}`)
+      const json = await res.json()
+      // unwrap 'history' (backend shape) or fall back to 'data'
+      setFocusData(normalizePoints(json.history || json.data || []))
+    } catch (err) {
+      setError(err.message)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  // initial load: last 4 hours
+  useEffect(() => {
+    const now = new Date()
+    const start = new Date(now.getTime() - 1000 * 60 * 60 * 4).toISOString()
+    const end = now.toISOString()
+    loadFocus({ start, end, resolution: 'minute' })
+    return () => {
+      if (wsRef.current) {
+        wsRef.current.close()
+        wsRef.current = null
+      }
+    }
+  }, [])
+
+  // toggle live websocket updates
+  useEffect(() => {
+    if (!live) {
+      if (wsRef.current) {
+        wsRef.current.close()
+        wsRef.current = null
+      }
+      return
+    }
+
+    const protocol = window.location.protocol === 'https:' ? 'wss' : 'ws'
+    const host = window.location.host
+    const url = `${protocol}://${host}/ws/focus`
+    const ws = new WebSocket(url)
+    wsRef.current = ws
+
+    ws.addEventListener('message', (ev) => {
+      try {
+        const msg = JSON.parse(ev.data)
+        if (msg.type === 'point' && msg.payload) {
+          setFocusData(prev => [...prev, ...normalizePoints([msg.payload])].slice(-500))
+        } else if (msg.type === 'points' && Array.isArray(msg.payload)) {
+          setFocusData(prev => [...prev, ...normalizePoints(msg.payload)].slice(-500))
+        }
+      } catch (_) { /* ignore parse errors */ }
+    })
+
+    ws.addEventListener('error', () => setLive(false))
+
+    return () => {
+      if (wsRef.current) {
+        wsRef.current.close()
+        wsRef.current = null
+      }
+    }
+  }, [live])
 
   return (
     <div style={styles.page}>
@@ -37,7 +120,28 @@ export default function LogPage({ onNavigate }) {
       {/* Focus Score */}
       <main style={{ ...styles.hero, alignItems: 'flex-start', padding: '2.5rem 2rem' }} className="anim-hero">
         <h1 style={{ ...styles.heroTitle, fontSize: '2rem', marginBottom: '1rem' }}>Focus Score</h1>
-        <p style={{ color: '#94a3b8', marginTop: 0, marginBottom: 18 }}>Line chart of focus score over time. Hover points for details (native tooltip).</p>
+        <p style={{ color: '#94a3b8', marginTop: 0, marginBottom: 12 }}>
+          Line chart of focus score over time. Hover points for details (native tooltip).
+        </p>
+
+        <div style={{ display: 'flex', gap: 8, alignItems: 'center', marginBottom: 12 }}>
+          <button onClick={() => {
+            const now = new Date()
+            const start = new Date(now.getTime() - 1000 * 60 * 60 * 4).toISOString()
+            const end = now.toISOString()
+            loadFocus({ start, end, resolution: 'minute' })
+          }} style={{ padding: '6px 10px' }}>
+            Refresh
+          </button>
+
+          <label style={{ color: '#94a3b8', fontSize: 13, display: 'flex', gap: 8, alignItems: 'center' }}>
+            <input type="checkbox" checked={live} onChange={(e) => setLive(e.target.checked)} />
+            Live updates
+          </label>
+
+          {loading && <span style={{ color: '#94a3b8' }}>Loading…</span>}
+          {error && <span style={{ color: '#f87171' }}>Error: {error}</span>}
+        </div>
 
         <div
           style={{ width: '100%', maxWidth: 805, background: '#0b1220', padding: 18, borderRadius: 10 }}

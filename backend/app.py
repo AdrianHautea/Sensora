@@ -21,18 +21,18 @@ def create_app():
 
 app = create_app()
 
-@app.route("/debug/samples")
+@app.route('/debug/samples')
 def debug_samples():
-    return {"samples": get_recent_samples()}
+    return {'samples': get_recent_samples()}
 
-@app.route("/api/focus/history")
+@app.route('/api/focus/history')
 def focus_history():
 
     samples = get_recent_samples()
 
     return jsonify({
-        "history": samples
+        'history': samples
     })
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
