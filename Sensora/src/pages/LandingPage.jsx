@@ -9,16 +9,9 @@ export default function LandingPage({ onNavigate }) {
       </nav>
 
       <main style={styles.hero}>
-        <h1 style={styles.heroTitle}>Welcome to MyApp</h1>
-        <p style={styles.heroSub}>A simple, clean starting point for your next big idea.</p>
-        <button style={styles.ctaBtn} onClick={() => onNavigate('log')}>
-          View the Log →
-        </button>
+        <h1 style={styles.heroTitle}>Welcome to Sensora</h1>
+        <p style={styles.heroSub}>Study sessions shaped by you, for you.</p>
       </main>
-
-      <footer style={styles.footer}>
-        <p style={styles.footerText}>© 2026 MyApp. All rights reserved.</p>
-      </footer>
     </div>
   )
 }

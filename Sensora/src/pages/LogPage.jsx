@@ -15,7 +15,7 @@ export default function LogPage({ onNavigate }) {
   return (
     <div style={styles.page}>
       <nav style={styles.nav}>
-        <span style={styles.navLogo}>MyApp</span>
+        <span style={styles.navLogo}>Sensora</span>
         <button style={styles.navBtn} onClick={() => onNavigate('landing')}>← Home</button>
       </nav>
 
@@ -45,11 +45,7 @@ export default function LogPage({ onNavigate }) {
             </div>
           ))}
         </div>
-      </main>
-
-      <footer style={styles.footer}>
-        <p style={styles.footerText}>© 2026 MyApp. All rights reserved.</p>
-      </footer>
+      </main> 
     </div>
   )
 }
