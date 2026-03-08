@@ -37,8 +37,39 @@ export default function LandingPage({ onNavigate }) {
       </nav>
 
       <main style={styles.hero} className="anim-hero">
-        <h1 style={styles.heroTitle}>Welcome to Sensora</h1>
-        <p style={styles.heroSub}>Study sessions shaped by you, for you.</p>
+        <div className="hero-container">
+          <svg
+            className="hero-wave"
+            viewBox="0 0 1200 220"
+            preserveAspectRatio="none"
+            aria-hidden="true"
+          >
+            <defs>
+              <linearGradient id="waveGrad" x1="0" x2="1" y1="0" y2="1">
+                <stop offset="0%" stopColor="#7c3aed" stopOpacity="0.18" />
+                <stop offset="100%" stopColor="#38bdf8" stopOpacity="0.06" />
+              </linearGradient>
+              <linearGradient id="waveGrad2" x1="0" x2="1" y1="0" y2="1">
+                <stop offset="0%" stopColor="#7c3aed" stopOpacity="0.12" />
+                <stop offset="100%" stopColor="#60a5fa" stopOpacity="0.04" />
+              </linearGradient>
+            </defs>
+
+            <path
+              className="wave wave1"
+              d="M0,120 C150,200 350,40 600,100 C850,160 1050,60 1200,120 L1200,220 L0,220 Z"
+            />
+            <path
+              className="wave wave2"
+              d="M0,140 C150,80 350,200 600,140 C850,80 1050,180 1200,140 L1200,220 L0,220 Z"
+            />
+          </svg>
+
+          <div className="hero-inner">
+            <h1 style={styles.heroTitle}>Welcome to Sensora</h1>
+            <p style={styles.heroSub}>Study sessions shaped by you, for you.</p>
+          </div>
+        </div>
       </main>
 
       <section style={styles.architectureSection} className="anim-architecture">

@@ -26,6 +26,61 @@
   will-change: transform, opacity;
 }
 
+.hero-container {
+  position: relative;
+  overflow: visible;
+  display: block;
+  padding-top: 6px; /* give space for wave */
+  --hero-wave-h: 200px;
+  min-height: calc(var(--hero-wave-h) + 40px);
+}
+
+.hero-inner {
+  position: relative;
+  z-index: 2; /* sit above the wave */
+  text-align: center;
+}
+
+/* SVG that sits behind hero text */
+.hero-wave {
+position: absolute;
+  left: 50%;
+  top: -74px;
+  transform: translateX(-50%);
+  width: 300%;
+  height: 400px;
+  z-index: 1;
+  pointer-events: none;
+  opacity: 0.95;
+}
+
+/* Wave layers */
+.wave1 { fill: url(#waveGrad); animation: waveMove 8000ms linear infinite; }
+.wave2 { fill: url(#waveGrad2); animation: waveMoveAlt 10000ms linear infinite; }
+
+/* gentle horizontal movement */
+@keyframes waveMove {
+  0%   { transform: translateX(0); }
+  50%  { transform: translateX(-8%); }
+  100% { transform: translateX(0); }
+}
+@keyframes waveMoveAlt {
+  0%   { transform: translateX(0); }
+  50%  { transform: translateX(10%); }
+  100% { transform: translateX(0); }
+}
+
+/* subtle vertical bob to add depth */
+
+/* apply bob to one layer for depth */
+.wave1 { animation-name: waveMove; animation-duration: 8000ms; animation-timing-function: linear; animation-iteration-count: infinite; }
+
+/* Respect reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .wave1, .wave2 { animation: none !important; transform: none !important; }
+  .hero-wave { opacity: 0.08; }
+}
+
 /* card hover/active polish */
 .architecture-card {
   transition: transform 180ms ease, box-shadow 180ms ease;
