@@ -5,10 +5,12 @@ from pipelines.mediapipe_utils import detect_face
 from pipelines.engagement_pipeline import predict_engagement
 from pipelines.eye_tracking_utils import get_eye_tracking
 from pipelines.smoothing_utils import MajorityVote
+from pipelines.focus_scoring import FocusScorer
 
 DATASET_PATH = 'dataset'
 
 engagement_smoother = MajorityVote(window_size=10)
+focus_scorer = FocusScorer(window_size=15)
 
 for root, dirs, files in os.walk(DATASET_PATH):
     for file in files:
@@ -44,10 +46,21 @@ for root, dirs, files in os.walk(DATASET_PATH):
         gaze = eye_data['gaze']
         yaw = eye_data['head_yaw']
 
+        focus_data = focus_scorer.compute_focus_score(
+            emo,
+            label,
+            eye_data['gaze'],
+            eye_data['head_yaw'],
+            eye_data['head_pitch'],
+            eye_data['head_roll'],
+            conf
+        )
+        print(focus_data)
+
         cv2.putText(
             frame,
-            f'{smoothed_label} | Yaw: {yaw:.1f} | Gaze: {gaze}',
-            (x1, y1 - 10),
+            f"Focus: {focus_data['focus_smoothed']:.4f}",
+            (x1, y1-35),
             cv2.FONT_HERSHEY_SIMPLEX,
             0.7,
             (0,255,0),
