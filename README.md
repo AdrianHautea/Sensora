@@ -1,6 +1,6 @@
 # Sensora
 
-A real-time study-focus monitor. A webcam watches you study, a computer-vision pipeline scores how engaged you are moment to moment, and an LLM turns those signals into short, actionable study nudges that are pushed to an ESP hardware device over serial. Built at a hackathon by a team of four.
+A real-time study-focus monitor. A webcam watches you study, a computer-vision pipeline scores how engaged you are moment to moment, and an LLM turns those signals into short, actionable study nudges that are pushed to an ESP hardware device over serial. Built at HackAI 2026 by a team of four.
 
 ## Demo
 
