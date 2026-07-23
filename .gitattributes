@@ -1,1 +1,2 @@
-Frontend/** linguist-vendored
+Frontend/ linguist-vendored=true
+*.vite linguist-vendored=true
