@@ -2,6 +2,12 @@
 
 A real-time study-focus monitor. A webcam watches you study, a computer-vision pipeline scores how engaged you are moment to moment, and an LLM turns those signals into short, actionable study nudges that are pushed to an ESP hardware device over serial. Built at a hackathon by a team of four.
 
+## Demo
+
+[![Sensora Demo](https://img.youtube.com/vi/_SV6jQipoL4/maxresdefault.jpg)](https://www.youtube.com/watch?v=_SV6jQipoL4)
+
+> Real-time focus scoring and LLM-generated study nudges pushed to embedded hardware.
+
 ## How it works
 
 ```
